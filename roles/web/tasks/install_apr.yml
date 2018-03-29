@@ -1,0 +1,33 @@
+---
+# build and install apr-devel
+
+- name :  Download apr source file 
+  get_url : 
+    url :  "{{ apr.url }}"
+    dest : "{{ apache_2_2.work_dir }}"
+       
+- name: apr のパッケージ化(rpm)
+  shell: "rpmbuild -ta --clean {{ apr.src_filename }}"
+  args:
+    chdir: "{{ apache_2_2.work_dir }}"
+    creates: "{{ apr.rpm_directory }}/{{ apr.rpm_filenames.1 }}"
+
+- name :  apr Create directory for package placement 
+  file : 
+    path :  "{{ apr.rpm_directory }}"
+    state : directory
+    owner : root
+    group : root
+    mode : 0755  
+
+- name: apr のパッケージ配置
+  shell: "find {{ apache_2_2.rpmbuild_dir }} -name '*.rpm' | xargs -i mv {} ."
+  args:
+    chdir: "{{ apr.rpm_directory }}"
+    creates: "{{ apr.rpm_directory }}/{{ apr.rpm_filenames.1 }}"
+
+- name: apr-devel のインストール
+  yum:
+    name: "{{ apr.rpm_directory }}/{{ item }}"
+    state: present
+  with_items: "{{ apr.rpm_filenames }}"

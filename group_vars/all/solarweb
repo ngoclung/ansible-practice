@@ -1,0 +1,65 @@
+php:
+  work_dir: /usr/local/src
+  url: http://museum.php.net/php5/php-5.3.19.tar.bz2
+  src_filename: php-5.3.19
+  src_path: /usr/local/src/php-5.3.19
+
+apache_2_2:
+  # 起動ユーザ
+  user_name: apache
+  # 起動グループ
+  group_name: apache
+  # ソースファイル作業ディレクトリ
+  work_dir: /usr/local/src
+  # RPM ファイルビルド先ディレクトリ
+  rpmbuild_dir: /root/rpmbuild
+  # ソースファイルダウンロード URL
+  url: http://archive.apache.org/dist/httpd/httpd-2.2.31.tar.bz2
+  # ソースファイル名
+  src_filename: httpd-2.2.31.tar.bz2
+  # RPM ファイル名
+  rpm_filenames:
+    - httpd-2.2.31.x86_64.rpm
+    - httpd-tools-2.2.31-1.x86_64.rpm
+    - mod_ssl-2.2.31-1.x86_64.rpm
+  # RPM ファイル配置ディレクトリ
+  rpm_directory: /usr/local/src/httpd
+  # 設定ファイルパス
+  conf_file: /etc/httpd/conf/httpd.conf
+
+apr:
+  # ソースファイルダウンロード URL
+  url: http://archive.apache.org/dist/apr/apr-1.5.2.tar.bz2
+  # ソースファイル名
+  src_filename: apr-1.5.2.tar.bz2
+  # RPM ファイル名
+  rpm_filenames:
+    - apr-1.5.2-1.x86_64.rpm
+    - apr-devel-1.5.2-1.x86_64.rpm
+  # RPM ファイル配置ディレクトリ
+  rpm_directory: /usr/local/src/apr
+
+apr_util:
+  # ソースファイルダウンロード URL
+  url: https://archive.apache.org/dist/apr/apr-util-1.6.1.tar.bz2
+  # ソースファイル名
+  src_filename: apr-util-1.6.1.tar.bz2
+  # RPM ファイル名
+  rpm_filenames:
+    - apr-util-1.6.1-1.x86_64.rpm
+    - apr-util-devel-1.6.1-1.x86_64.rpm
+  # RPM ファイル配置ディレクトリ
+  rpm_directory: /usr/local/src/apr-util
+
+distcache:
+  # ソースファイルダウンロード URL
+  url: https://archive.fedoraproject.org/pub/archive/fedora/linux/releases/18/Everything/source/SRPMS/d/distcache-1.4.5-23.src.rpm
+  # ソースファイル名
+  src_filename: distcache-1.4.5-23.src.rpm
+  # RPM ファイル名
+  rpm_filenames:
+    - distcache-1.4.5-23.x86_64.rpm
+    - distcache-devel-1.4.5-23.x86_64.rpm
+  # RPM ファイル配置ディレクトリ
+  rpm_directory: /usr/local/src/distcache
+

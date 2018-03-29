@@ -1,0 +1,27 @@
+# How to run
+
+### Description : 
+Run ansible to install JDK 1.7, Apache 2.2.31, php 5.3.19 in Centos 7 OS
+
+### Requirements :
+    
+ - Vagrant Centos 7
+  - Ansible 2.4
+
+### Features!
+  - install JDK 1.7, Apache 2.2.31, php 5.3.19 in Centos 7
+
+### Installation
+- Install vagant with CentOS 7 box
+```ssh
+vagrant init centos/7
+vagrant up```
+### Not fix
+- Install apacheapache 2.2.31 in CentOS 7 -> got error when build apr-util
+- Only run at localhost Centos 7
+### Run it
+
+```sh
+$ vagrant ssh
+$ cd dmm_solar_provisioners
+$ ansible-playbook -i hosts solarweb.yml```

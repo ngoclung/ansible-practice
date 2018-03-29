@@ -1,0 +1,53 @@
+---
+# build and install apr-util-devel
+
+- name :  Install package needed to build apr - util 
+  yum : 
+    name :  " {{ item }}"
+    state : present
+  with_items :
+    - expat-devel
+    - db4-devel
+    - postgresql-devel
+    - mysql-devel
+    - sqlite-devel
+    - unixODBC-devel
+    - nss-devel
+    - epel-release
+    - libuuid-devel
+    - openldap-devel
+- name :  Install package needed to build apr - util (epel) 
+  yum : 
+    name :  freetds-devel 
+    state :  present
+
+- name :  Download apr source file 
+  get_url : 
+    url :  "{{ apr_util.url }}"
+    dest : "{{ apache_2_2.work_dir }}"
+
+- name: apr-util のパッケージ化(rpm)
+  shell: "rpmbuild -tb --clean {{ apr_util.src_filename }}"
+  args:
+    chdir: "{{ apache_2_2.work_dir}}"
+    creates: "{{ apr_util.rpm_directory }}/{{ apr_util.rpm_filenames.1 }}"
+
+- name :  apr-util Create directory for package placement 
+  file : 
+    path :  " {{ apr_util.rpm_directory }}"
+    state : directory
+    owner : root
+    group : root
+    mode : 0755
+
+- name: apr-util のパッケージ配置
+  shell: "find {{ apache_2_2.rpmbuild_dir }} -name '*.rpm' | xargs -i mv {} ."
+  args:
+    chdir: "{{ apr_util.rpm_directory }}"
+    creates: "{{ apr_util.rpm_directory }}/{{ apr_util.rpm_filenames.1 }}"
+
+- name: apr-util-devel のインストール
+  yum:
+    name: "{{ apr_util.rpm_directory }}/{{ item }}"
+    state: present
+  with_items: "{{ apr_util.rpm_filenames }}"

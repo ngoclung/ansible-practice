@@ -1,0 +1,7 @@
+---
+- import_tasks: install_apr.yml
+- import_tasks: install_apr_util.yml
+- import_tasks: install_distcache.yml
+- import_tasks: install_httpd_2_2.yml
+- import_tasks: install_php.yml
+- import_tasks: install_jdk.yml

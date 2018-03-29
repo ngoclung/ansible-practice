@@ -1,0 +1,78 @@
+- name: Install epel from remote repo
+  yum: name=https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm state=present
+
+- name: Install libraries
+  yum: pkg={{ item }}
+  with_items:
+    - pcre-devel.x86_64
+    - httpd.x86_64
+    - httpd-devel.x86_64
+    - wget.x86_64
+    - mlocate.x86_64
+    - mhash.x86_64
+    - mhash-devel.x86_64
+    - libssh2-devel.x86_64
+    - openssl.x86_64
+    - libssh2.x86_64
+    - libxml2.x86_64
+    - libxml2-devel.x86_64
+    - libmcrypt.x86_64
+    - libmcrypt-devel.x86_64
+    - openssl-devel.x86_64
+    - tidy.x86_64
+    - libtidy.x86_64
+    - libtidy-devel.x86_64
+    - bzip2.x86_64
+    - bzip2-devel.x86_64
+    - libXpm-devel.x86_64
+    - libxslt.x86_64
+    - libxslt-devel.x86_64
+    - pcre.x86_64
+    - pcre-devel.x86_64
+    - libpng.x86_64
+    - libpng-devel.x86_64
+    - libXpm.x86_64
+    - freetype-devel.x86_64
+    - libtool-ltdl-devel.x86_64
+    - pcre.x86_64
+    - gcc
+    - libcurl-devel.x86_64
+    - libjpeg-turbo-devel
+    - bzip2-devel
+
+- name: Download and unpack PHP
+  unarchive:
+    src: "{{ php.url }}"
+    dest: "{{ php.work_dir }}"
+    copy: no
+
+- name: Running ./configure for PHP
+  command: './configure --prefix=/usr/local/{{ php.src_filename }} --with-config-file-scan-dir=/usr/local/{{ php.src_filename }}/php.d --with-apxs2 --with-mysql=mysqlnd --with-mysqli=mysqlnd --with-mcrypt --with-mhash --enable-mbstring --with-gettext --with-openssl --with-curl=/usr/local/ --enable-calendar --enable-exif --enable-ftp --enable-zip --enable-soap --enable-bcmath --with-xmlrpc --with-tidy=/usr --with-bz2 --with-zlib --with-pear --with-kerberos --with-xsl --with-gd --enable-gd-native-ttf --with-jpeg-dir=/usr --with-png-dir=/usr --with-freetype-dir=/usr --with-pcre-regex --with-libdir=lib64 --with-pdo-mysql=mysqlnd'
+  args:
+    chdir: "{{ php.src_path }}"
+ 
+- name: Running "make" for PHP
+  make: 
+    chdir: "{{ php.src_path }}"
+
+- name: Running "make install" for PHP
+  make: 
+    chdir: "{{ php.src_path }}"
+    target: install
+
+- name: Copy "php.ini"
+  command: 'cp php.ini-production /usr/local/{{ php.src_filename }}/lib/php.ini'
+  args:
+    chdir: "{{ php.src_path }}"
+
+- name: Link phar.phar to bin/phar
+  file:
+    src: '/usr/local/{{ php.src_filename }}/bin/phar.phar'
+    dest: '/usr/local/{{ php.src_filename }}/bin/phar'
+    state: link
+  
+- name: Add PHP PATH php to profile.d
+  copy: src=php.sh dest=/etc/profile.d mode=0755
+
+- name: Reload profile
+  shell: '. /etc/profile'
